@@ -9,7 +9,6 @@
 #define done }
 #define while while (
 #define do ){
-#define done }
 #define bool char
 #define true 1
 #define false 0
@@ -70,7 +69,6 @@ static int heater(void *data)
 		/* this thread has been told to game end itself */
 		if this->run != true then break;
 	done
-	printf("going to game end myself\n");
 	free(this);
 	return i;
 }
@@ -78,12 +76,10 @@ static int heater(void *data)
 void spawn_heater(Screen *scr)
 {
 	char name[20];
-	snprintf(name, 19, "thread number %d", scr->trd);
 	Thread_list *trl = new(Thread_list);
 	trl->run = true;
 	SDL_Thread *thread = SDL_CreateThread(heater, name, trl);
 	if thread do
-		printf("spawned %s\n", SDL_GetThreadName(thread));
 		trl->trd = thread;
 		if scr->trl == NULL do
 			scr->trl = trl;
@@ -111,7 +107,6 @@ void kill_heater(Screen *scr)
 	if trl == NULL then return;
 	if trl->run == false then puts("readan gjort");
 	scr->trl = scr->trl->nxt;
-	printf("killing %s\n", SDL_GetThreadName(trl->trd));
 	trl->run = false;
 	/* the memory is now only accesable from the thread and can therefore
 	safely be freed from there */
@@ -127,14 +122,19 @@ Screen *init_sdl(void)
 	scr->trd = 0;
 	scr->frm = 0;
 	srand(1337);
+
 	if SDL_Init(SDL_INIT_VIDEO) != succesful then
 		die("Could not initialize SDL", scr);
+
 	scr->win = SDL_CreateWindow("Computer heating service",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		scr->wdt, scr->hgt, SDL_WINDOW_SHOWN);
+
 	if scr->win == NULL then
 		die("Window could not be created", scr);
+
 	scr->srf = SDL_GetWindowSurface(scr->win);
+
 	/*if TTF_Init() != succesful then
 		die("could not initialize SDL_tff", scr);*/
 }
@@ -151,20 +151,23 @@ void handle_button_press(Screen *scr,  SDL_MouseButtonEvent *ev)
 	if ev->y < scr->hgt - 32
 		&& ev->y > scr->hgt - 64 then
 		if ev->x < (scr->wdt / 2) - 6
-			&& ev->x > (scr->wdt / 2) - 40
-			then spawn_heater(scr);
+			&& ev->x > (scr->wdt / 2) - 40 then
+			spawn_heater(scr);
 		else if ev->x > (scr->wdt / 2) + 32
-			&& ev->x < (scr->wdt / 2) + 64
-			then kill_heater(scr);
+			&& ev->x < (scr->wdt / 2) + 64 then
+			kill_heater(scr);
 }
 
 void handle_event(Screen *scr, SDL_Event *ev)
 {
 	switch (ev->type) {
-		case SDL_QUIT: scr->run = false; 						break;
-		case SDL_KEYUP: handle_keypress(scr, ev); 				break;
+		case SDL_QUIT: scr->run = false;
+			break;
+		case SDL_KEYUP: handle_keypress(scr, ev);
+			break;
 		case SDL_MOUSEBUTTONDOWN:
-			handle_button_press(scr, (SDL_MouseButtonEvent *)ev); break;
+			handle_button_press(scr, (SDL_MouseButtonEvent *)ev);
+			break;
 	}
 }
 
@@ -213,8 +216,9 @@ void draw_loading_bar(Screen *scr)
 	bar.h = height;
 	SDL_FillRect(scr->srf, &bar,
 		SDL_MapRGB(scr->srf->format, 0x5A, 0x92, 0x71));
+
 	if x > scr->wdt - width do
-		/* bar is partly outside window and will therefore loop arond */
+		/* The bar is partly outside window and will therefore loop arond */
 		bar.x = 0;
 		bar.y = scr->hgt - height;
 		bar.w = x - scr->wdt + width;
