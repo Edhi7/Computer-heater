@@ -2,7 +2,7 @@
 #include "SDL_ttf.h"
 #include "stdio.h"
 
-/* personal preference */
+/* Personal preference */
 #define range(s, e) for (int i = s; i < e; i++
 #define if if (
 #define then )
@@ -17,7 +17,7 @@
 
 typedef struct __thread_list {
 	SDL_Thread *trd;
-	/* set to false when thread should game end it self */
+	/* Set to false when thread should game end it self */
 	bool run;
 	struct __thread_list *nxt;
 } Thread_list;
@@ -66,7 +66,7 @@ static int heater(void *data)
 		i += fib(10);
 		/* i increases with 1 each iteration */
 		i -= 78;
-		/* this thread has been told to game end itself */
+		/* This thread has been told to game end itself */
 		if this->run != true then break;
 	done
 	free(this);
@@ -108,8 +108,9 @@ void kill_heater(Screen *scr)
 	if trl->run == false then puts("readan gjort");
 	scr->trl = scr->trl->nxt;
 	trl->run = false;
-	/* the memory is now only accesable from the thread and can therefore
-	safely be freed from there */
+	/*  The memory is now only accesable from the thread and can therefore
+	*	safely be freed from there
+	*/
 	scr->trd--;
 }
 
@@ -176,7 +177,7 @@ void draw_plus_minus(Screen *scr)
 	SDL_Rect sign;
 	const int size = 32;
 
-	/* draw plus first */
+	/* Draw plus first */
 	sign.x = (scr->wdt / 2) - 12 - (size / 2);
 	sign.y = scr->hgt - 32 - size;
 	sign.w = 8;
@@ -184,7 +185,7 @@ void draw_plus_minus(Screen *scr)
 	SDL_FillRect(scr->srf, &sign,
 		SDL_MapRGB(scr->srf->format, 0x5A, 0x92, 0x71));
 
-	/* the horizontal part of the plus */
+	/* The horizontal part of the plus */
 	sign.x = (scr->wdt / 2) - 8 - size;
 	sign.y = scr->hgt - 32 - (size / 2) - 4;
 	sign.w = size;
@@ -192,7 +193,7 @@ void draw_plus_minus(Screen *scr)
 	SDL_FillRect(scr->srf, &sign,
 		SDL_MapRGB(scr->srf->format, 0x5A, 0x92, 0x71));
 
-	/* to draw the minus sign we only have to move the horizontal part of 
+	/* To draw the minus sign we only have to move the horizontal part of 
 		the plus sign */
 	sign.x = (scr->wdt / 2) + size;
 	SDL_FillRect(scr->srf, &sign,
@@ -242,7 +243,7 @@ void draw_threads(Screen *scr)
 			square.x = 8;
 			square.y += 16;
 		done
-		/* the random numbers can be -1, 0, or 1 */ 
+		/* The random numbers can be -1, 0, or 1 */ 
 		rnx = rand() % 3 - 1;
 		rny = rand() % 3 - 1;
 		square.x += rnx;
@@ -279,8 +280,7 @@ void loop(Screen *scr)
 	done
 }
 
-/* TODO: gör så man kan ändra processantalet genom GUI och se
-processoranvändning och temp etc...*/
+/* TODO: gör så man kan  se processoranvändning och temp etc...*/
 
 int main(int argc, char **argv)
 {
